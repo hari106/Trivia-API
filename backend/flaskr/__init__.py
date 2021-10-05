@@ -23,7 +23,7 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Headers',
                              'Content-Type, Authorization')
         response.headers.add('Access-Control-Allow-Methods',
-                             'GET, PATCH, POST, DELETE, OPTIONS, PUT')
+                             'GET, PATCH, POST, DELETE, OPTIONS')
 
         return response
 
@@ -55,7 +55,7 @@ def create_app(test_config=None):
 
         count = len(questions)
 
-        if page_num > count - 1:
+        if page_num > count - 1 or page_num < 1:
             abort(404)
 
         formatted_questions = [question.format() for question in questions]
@@ -164,7 +164,7 @@ def create_app(test_config=None):
 
         index = random.randint(0, len(formatted) - 1)
 
-        return jsonify(formatted[index])
+        return jsonify({'question': formatted[index]})
 
     @app.errorhandler(404)
     def not_found(error):

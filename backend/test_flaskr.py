@@ -134,6 +134,18 @@ class TriviaTestCase(unittest.TestCase):
         self.assertIn('totalQuestions', data)
         self.assertTrue(data['totalQuestions'] >= 0)
 
+    def test_search_questions_by_term_fail(self):
+        search_txt = {
+            'searchTerm': 'xyzhskd'
+        }
+
+        res = self.client().post('/api/v1.0/questions', json=search_txt)
+        data = json.loads(res.data)
+
+        self.assertIn('questions', data)
+        self.assertIn('totalQuestions', data)
+        self.assertTrue(data['totalQuestions'] == 0)
+
     def test_post_quizzes(self):
         test_data = {
             'previous_questions': [15,19],
@@ -143,10 +155,7 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().post('/api/v1.0/quizzes', json=test_data)
         data = json.loads(res.data)
 
-        self.assertIn(b'question', res.data)
-        self.assertIn(b'answer', res.data)
-        self.assertIn(b'difficulty', res.data)
-        self.assertIn(b'category', res.data)
+        self.assertIn('question', res.data)
 
 
 # Make the tests conveniently executable
