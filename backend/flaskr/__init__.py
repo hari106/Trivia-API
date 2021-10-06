@@ -50,10 +50,14 @@ def create_app(test_config=None):
         start = page_num - 1
         end = start + QUESTIONS_PER_PAGE
 
-        questions = Question.query.all()
+        all_questions = Question.query.all()
         categories = Category.query.all()
 
-        count = len(questions)
+        count = len(all_questions)
+        
+        #paginated list
+        pg_query = Question.query.paginate(start, QUESTIONS_PER_PAGE, False)
+        questions = pg_query.items
 
         if page_num > count - 1 or page_num < 1:
             abort(404)
@@ -62,7 +66,7 @@ def create_app(test_config=None):
         formatted_categories = [category.format() for category in categories]
 
         return jsonify({
-            'questions': formatted_questions[start:end],
+            'questions': formatted_questions,
             'totalQuestions': count,
             'categories': formatted_categories,
         })

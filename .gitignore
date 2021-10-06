@@ -1,3 +1,8 @@
+#exclude python binaries
+__pycache__/
+*.py[cod]
+*$py.class
+
 # exclude environments
 .env
 .venv
