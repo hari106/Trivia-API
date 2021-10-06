@@ -47,8 +47,6 @@ def create_app(test_config=None):
     @app.route('/api/v1.0/questions', methods=['GET'])
     def get_questions():
         page_num = request.args.get('page', 1, int)
-        start = page_num - 1
-        end = start + QUESTIONS_PER_PAGE
 
         all_questions = Question.query.all()
         categories = Category.query.all()
@@ -56,7 +54,7 @@ def create_app(test_config=None):
         count = len(all_questions)
         
         #paginated list
-        pg_query = Question.query.paginate(start, QUESTIONS_PER_PAGE, False)
+        pg_query = Question.query.paginate(page_num, QUESTIONS_PER_PAGE, False)
         questions = pg_query.items
 
         if page_num > count - 1 or page_num < 1:
